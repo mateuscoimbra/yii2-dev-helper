@@ -3,6 +3,8 @@
 
 > Repositório com exemplos ultra comentados de componentes Yii2 como `ActiveForm`, `GridView` e `DetailView`, criado para auxiliar programadores iniciantes e acelerar o desenvolvimento com base em boas práticas e reutilização de código.
 
+> 🔒 **Nota:** Este exemplo é apenas para fins didáticos/documentais. Nem todos os atributos coexistem no mundo real, mas o objetivo aqui é **cobrir todas as possibilidades comuns e avançadas** de uso.
+
 ---
 
 ## 📌 Objetivo
