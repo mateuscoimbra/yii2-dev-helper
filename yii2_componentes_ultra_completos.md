@@ -390,7 +390,4 @@ $form->field($model, 'data_nascimento')->textInput([
     'max' => date('Y-m-d'), // Data máxima (hoje)
 ]);
 ```
-
-````
-
----
+-----

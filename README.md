@@ -21,8 +21,9 @@ Este repositório foi criado para ser um **guia prático e direto ao ponto**, co
 
 | Arquivo                               | Descrição                                                                                               |
 |---------------------------------------|---------------------------------------------------------------------------------------------------------|
-| `yii2_componentes_ultra_completos.md` | Guia detalhado em Markdown com exemplos completos de `ActiveForm`, `GridView` e `DetailView`. |
-| `yii2_snippet_base_completo.php`      | Snippet PHP completo, pronto para copiar e colar no projeto, com um modelo mock para testes.    |
+| `yii2_componentes_ultra_completos.md` | Guia detalhado em Markdown com exemplos completos de `ActiveForm`, `GridView` e `DetailView`.           |
+| `yii2_snippet_base_completo.php`      | Snippet PHP completo, pronto para copiar e colar no projeto, com um modelo mock para testes.            |
+| `mysql_snippet_base_completo.md`      | Guia para iniciantes com os tipos de dados, índices, chaves estrangeiras e constraints                  |
 
 ---
 
@@ -67,5 +68,4 @@ Dúvidas, sugestões ou colaborações, fale comigo pelo [GitHub Issues](https:/
 
 Feito com ❤️ para ajudar a comunidade Yii2 brasileira\!
 
-```
-```
+-----
