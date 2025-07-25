@@ -48,6 +48,289 @@ Inclua os exemplos no seu projeto Yii2, adapte conforme seu modelo e contexto. L
 
 -----
 
+# 🧭 Guia de Configuração Yii2 para Aplicações no Brasil
+
+Este projeto utiliza o Yii2 Framework com configurações adaptadas para aplicações brasileiras, incluindo idioma, timezone, formatação local e boas práticas de layout e estrutura.
+
+---
+
+## ⚙️ Estrutura do Projeto
+
+- `config/web.php`: Configurações da aplicação web (entrypoint padrão).
+- `config/params.php`: Parâmetros customizados.
+- `config/db.php`: Configurações de banco de dados.
+- `views/layouts/main-dashboard.php`: Layout principal da aplicação.
+- `messages/pt-BR/`: Diretório de traduções (i18n).
+
+---
+
+
+```
+No `web/config/main.php` (ou `web.php`), a variável `$config` aceita diversos **atributos principais**, e dentro de cada seção (`components`, `modules`, etc.), há dezenas de subatributos configuráveis.
+
+---
+
+### ✅ Principais atributos do array `$config`
+
+Aqui está uma explicação das **principais chaves possíveis** no array de configuração do Yii2:
+
+| Atributo              | Descrição                                                                  |
+| --------------------- | -------------------------------------------------------------------------- |
+| `id`                  | ID da aplicação. Obrigatório.                                              |
+| `basePath`            | Caminho base da aplicação (normalmente `dirname(__DIR__)`).                |
+| `name`                | Nome da aplicação. (opcional, aparece em `Yii::$app->name`)                |
+| `language`            | Idioma padrão (ex: `pt-BR`, `en-US`).                                      |
+| `sourceLanguage`      | Idioma base do sistema (ex: `en-US`).                                      |
+| `bootstrap`           | Componentes ou classes que devem ser carregadas no bootstrap da aplicação. |
+| `aliases`             | Atalhos de caminhos para diretórios (ex: `@bower`, `@npm`, `@runtime`).    |
+| `components`          | Lista de componentes da aplicação (cache, db, mailer, log, etc.).          |
+| `modules`             | Lista de módulos registrados na aplicação.                                 |
+| `controllerNamespace` | Namespace padrão dos controllers (ex: `app\controllers`).                  |
+| `defaultRoute`        | Rota padrão, como `'site/index'`.                                          |
+| `layout`              | Layout padrão usado pelos controllers.                                     |
+| `params`              | Parâmetros externos, geralmente definidos no `params.php`.                 |
+| `runtimePath`         | Caminho para o diretório de arquivos temporários e de log.                 |
+| `vendorPath`          | Caminho para o diretório `vendor`.                                         |
+| `timeZone`            | Fuso horário da aplicação (`America/Sao_Paulo`, por exemplo).              |
+
+---
+
+### ✅ Exemplos de componentes comuns (dentro de `'components'`)
+
+Você já usa vários, mas pode configurar outros como:
+
+* `formatter`: para formatação de datas, números, moedas
+* `authManager`: para RBAC
+* `i18n`: para tradução e internacionalização
+* `session`: configurações de sessão
+* `assetManager`: para controle de assets (como forçar publish de JS/CSS)
+* `view`: configuração da renderização de views
+* `response`: cabeçalhos de saída, formatação JSON, etc.
+
+```php
+'formatter' => [
+    'class' => 'yii\i18n\Formatter',
+    'dateFormat' => 'php:d/m/Y',
+    'datetimeFormat' => 'php:d/m/Y H:i:s',
+    'currencyCode' => 'BRL',
+],
+```
+
+---
+
+### ✅ Outros exemplos úteis
+
+```php
+'name' => 'Sistema de Indicadores',
+'language' => 'pt-BR',
+'sourceLanguage' => 'en-US',
+'timeZone' => 'America/Sao_Paulo',
+'defaultRoute' => 'dashboard/index',
+'layout' => 'main-dashboard', // views/layouts/main-dashboard.php
+```
+
+---
+
+Claro, Mateus! Abaixo está um `README.md` em Markdown que documenta essas boas práticas e configurações para uma aplicação Yii2 voltada ao contexto brasileiro:
+
+---
+
+````markdown
+# 🧭 Guia de Configuração Yii2 para Aplicações no Brasil
+
+Este projeto utiliza o Yii2 Framework com configurações adaptadas para aplicações brasileiras, incluindo idioma, timezone, formatação local e boas práticas de layout e estrutura.
+
+---
+
+## ⚙️ Estrutura do Projeto
+
+- `config/web.php`: Configurações da aplicação web (entrypoint padrão).
+- `config/params.php`: Parâmetros customizados.
+- `config/db.php`: Configurações de banco de dados.
+- `views/layouts/main-dashboard.php`: Layout principal da aplicação.
+- `messages/pt-BR/`: Diretório de traduções (i18n).
+
+---
+
+## 🇧🇷 Configuração recomendada (`web.php`)
+
+```php
+$config = [
+    'id' => 'sistema-indicadores',
+    'name' => 'Sistema de Indicadores',
+    'basePath' => dirname(__DIR__),
+    'language' => 'pt-BR',
+    'sourceLanguage' => 'en-US',
+    'timeZone' => 'America/Sao_Paulo',
+    'defaultRoute' => 'dashboard/index',
+    'layout' => 'main-dashboard',
+
+    'bootstrap' => ['log'],
+
+    'aliases' => [
+        '@bower' => '@vendor/bower-asset',
+        '@npm'   => '@vendor/npm-asset',
+    ],
+
+    'components' => [
+        'request' => [
+            'cookieValidationKey' => 'SUA_CHAVE_SECRETA_AQUI',
+        ],
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
+        'user' => [
+            'identityClass' => 'app\models\User',
+            'enableAutoLogin' => true,
+        ],
+        'session' => [
+            'timeout' => 3600,
+            'cookieParams' => ['httponly' => true],
+        ],
+        'errorHandler' => [
+            'errorAction' => 'site/error',
+        ],
+        'mailer' => [
+            'class' => \yii\symfonymailer\Mailer::class,
+            'viewPath' => '@app/mail',
+            'useFileTransport' => true,
+        ],
+        'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning'],
+                ],
+            ],
+        ],
+        'db' => $db,
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [],
+        ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'locale' => 'pt-BR',
+            'dateFormat' => 'php:d/m/Y',
+            'datetimeFormat' => 'php:d/m/Y H:i:s',
+            'decimalSeparator' => ',',
+            'thousandSeparator' => '.',
+            'currencyCode' => 'BRL',
+        ],
+        'assetManager' => [
+            'appendTimestamp' => true,
+        ],
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class' => yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@app/messages',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'params' => $params,
+];
+````
+
+---
+
+## 🎨 Personalização do Navbar
+
+Para usar uma `NavBar` com cor personalizada (por exemplo, `#001f5d`), aplique uma classe no componente e defina os estilos no CSS:
+
+### PHP
+
+```php
+NavBar::begin([
+    'brandLabel' => Yii::$app->name,
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => [
+        'class' => 'navbar navbar-expand-md custom-navbar fixed-top',
+    ],
+]);
+```
+
+### CSS (`web/css/site.css`)
+
+```css
+.custom-navbar {
+    background-color: #001f5d !important;
+}
+
+.custom-navbar .navbar-brand,
+.custom-navbar .nav-link {
+    color: #ffffff !important;
+}
+
+.custom-navbar .dropdown-menu {
+    background-color: #002a80;
+    border: none;
+}
+
+.custom-navbar .dropdown-item {
+    color: #ffffff !important;
+}
+
+.custom-navbar .dropdown-item:hover {
+    background-color: #003d99;
+}
+```
+
+---
+
+## 🔐 Segurança
+
+* Gere uma `cookieValidationKey` com segurança:
+
+```php
+Yii::$app->security->generateRandomString();
+```
+
+* Em produção, defina `'useFileTransport' => false` no `mailer`.
+
+---
+
+## 📦 Dependências e Assets
+
+* Registre corretamente os arquivos CSS/JS em `AppAsset.php`.
+* Use `appendTimestamp => true` no `assetManager` para forçar recarregamento de arquivos alterados.
+
+---
+
+## 🗂 Organização Sugerida
+
+```
+app/
+├── config/
+│   ├── web.php
+│   ├── db.php
+│   └── params.php
+├── views/
+│   └── layouts/
+│       └── main-dashboard.php
+├── web/
+│   └── css/
+│       └── site.css
+├── messages/
+│   └── pt-BR/
+│       ├── app.php
+│       └── error.php
+```
+
+---
+
+
+```
+
+
 ## 🤝 Contribuições 💖
 
 Contribuições são bem-vindas\! Se você tem exemplos úteis, sugestões ou melhorias, sinta-se à vontade para abrir um Pull Request ou Issue.
