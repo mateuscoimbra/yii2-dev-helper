@@ -1,0 +1,50 @@
+# Yii2 - Arquivo .gitignore recomendado
+
+# Sistema
+/runtime/
+/vendor/
+/web/assets/
+/.idea/
+.DS_Store
+Thumbs.db
+
+# Configurações locais
+/.env
+/.env.local
+/config/db.php
+/config/params-local.php
+
+# Arquivos de log
+/web/debug/
+/web/log/
+/logs/
+/*.log
+
+# Cache de Composer
+composer.lock
+
+# Arquivos do Yii Debugger e Gii
+/web/index-test.php
+/tests/_output/
+/tests/_support/_generated/
+
+# Arquivos de backup e swap
+*~
+*.swp
+*.bak
+
+# Ignorar mensagens de tradução
+/messages/**/app.php
+/messages/**/error.php
+/messages/**/auth.php
+
+# Ignorar uploads temporários
+/web/uploads/tmp/
+/web/uploads/cache/
+
+# Arquivos de ambiente/IDE
+*.iml
+/.vscode/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
