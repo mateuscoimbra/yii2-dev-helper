@@ -59,7 +59,6 @@ Este projeto utiliza o Yii2 Framework com configurações adaptadas para aplica�
 - `config/web.php`: Configurações da aplicação web (entrypoint padrão).
 - `config/params.php`: Parâmetros customizados.
 - `config/db.php`: Configurações de banco de dados.
-- `views/layouts/main-dashboard.php`: Layout principal da aplicação.
 - `messages/pt-BR/`: Diretório de traduções (i18n).
 
 ---
