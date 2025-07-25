@@ -66,13 +66,13 @@ Este projeto utiliza o Yii2 Framework com configurações adaptadas para aplica�
 
 
 ```
-No `web/config/main.php` (ou `web.php`), a variável `$config` aceita diversos **atributos principais**, e dentro de cada seção (`components`, `modules`, etc.), há dezenas de subatributos configuráveis.
+No `app/config/web.php` (ou `web.php`), a variável `$config` aceita diversos *atributos principais*, e dentro de cada seção (`components`, `modules`, etc.), há dezenas de subatributos configuráveis.
 
 ---
 
-### ✅ Principais atributos do array `$config`
+✅ Principais atributos do array `$config`
 
-Aqui está uma explicação das **principais chaves possíveis** no array de configuração do Yii2:
+Aqui está uma explicação das *principais chaves possíveis* no array de configuração do Yii2:
 
 | Atributo              | Descrição                                                                  |
 | --------------------- | -------------------------------------------------------------------------- |
@@ -95,7 +95,7 @@ Aqui está uma explicação das **principais chaves possíveis** no array de con
 
 ---
 
-### ✅ Exemplos de componentes comuns (dentro de `'components'`)
+✅ Exemplos de componentes comuns (dentro de `'components'`)
 
 Você já usa vários, mas pode configurar outros como:
 
@@ -118,7 +118,7 @@ Você já usa vários, mas pode configurar outros como:
 
 ---
 
-### ✅ Outros exemplos úteis
+✅ Outros exemplos úteis
 
 ```php
 'name' => 'Sistema de Indicadores',
