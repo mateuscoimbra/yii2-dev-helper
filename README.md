@@ -327,6 +327,87 @@ app/
 
 ---
 
+## 🧩 Campos Especiais com inputOptions
+
+Além de passar atributos diretamente em `textInput()`, você também pode usar `inputOptions` diretamente no terceiro parâmetro de `$form->field()`:
+
+```php
+$form->field($model, 'nome', [
+    'inputOptions' => [
+        'id' => 'nome-entrega',
+        'class' => 'form-control',
+        'autofocus' => true,
+    ]
+])->textInput(['maxlength' => true, 'placeholder' => "Nome da entrega/produto"]);
+```
+
+## 📅 Widget MaskedInput (componente externo)
+
+```php
+use yii\widgets\MaskedInput;
+
+$form->field($model, 'data_evento', [
+    'template' => '{input}{error}{hint}'
+])->widget(MaskedInput::class, [
+    'mask' => '99/99/9999',
+    'clientOptions' => [
+        'alias' => 'datetime',
+        'placeholder' => 'dd/mm/aaaa'
+    ]
+]);
+```
+
+## 🖼️ Exibindo Imagens Base64
+
+### Em GridView:
+```php
+[
+    'attribute' => 'imagem_base64',
+    'format' => 'raw',
+    'value' => fn($model) =>
+        "<img src='data:image/jpeg;base64," . $model->imagem_base64 . "' width='70' height='70'/>",
+    'filter' => false,
+]
+```
+
+### Em DetailView:
+```php
+[
+    'attribute' => 'imagem_base64',
+    'value' => 'data:image/png;base64,' . $model->imagem_base64,
+    'format' => ['image', ['width' => '100', 'height' => '100']]
+]
+```
+
+## 🎯 Campos HTML5 com ->input('type')
+
+```php
+$form->field($model, 'email')->input('email');
+$form->field($model, 'data_nascimento')->input('date');
+$form->field($model, 'numero')->input('number');
+$form->field($model, 'telefone')->input('tel');
+$form->field($model, 'url')->input('url');
+$form->field($model, 'cor_favorita')->input('color');
+$form->field($model, 'arquivo')->input('file');
+```
+
+## 👁️ Colunas Condicionalmente Visíveis no GridView
+
+```php
+[
+    'attribute' => 'campo_secreto',
+    'visible' => Yii::$app->user->identity->isAdmin,
+    'value' => fn($model) => $model->campo_secreto,
+]
+```
+
+## 🔐 Segurança e Autenticação Avançada (JWT)
+
+Para projetos com APIs RESTful protegidas por tokens, veja:
+
+- [sizeg/yii2-jwt no GitHub](https://github.com/sizeg/yii2-jwt/)
+- [Tutorial oficial Yii2 JWT](https://www.yiiframework.com/wiki/2568/jwt-authentication-tutorial)
+
 
 ```
 

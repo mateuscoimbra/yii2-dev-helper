@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use yii\widgets\MaskedInput;
 use yii\data\ActiveDataProvider;
 
 // Mock de um modelo para fins de exemplo. Em um projeto real, você usaria seus próprios modelos.
@@ -276,6 +277,13 @@ $form = ActiveForm::begin([
         'max' => date('Y-m-d'),
     ])->label('Data de Nascimento <i class="fas fa-calendar-alt"></i>') ?>
 
+    <?= $form->field($model, 'data_nascimento')->widget(MaskedInput::class, [
+        'mask' => '99/99/9999',
+        'clientOptions' => ['alias' => 'datetime', 'placeholder' => 'dd/mm/aaaa']
+    ]) ?>
+
+    <?= $form->field($model, 'arquivo')->fileInput(['multiple' => true, 'accept' => '.pdf,image/*']) ?>
+
     <div class="form-group text-center mt-4">
         <?= Html::submitButton('<i class="fas fa-save"></i> Salvar Dados', [
             'class' => 'btn btn-success btn-lg me-2',
@@ -345,6 +353,11 @@ $form = ActiveForm::begin([
             'attribute' => 'observacoes',
             'format' => 'ntext', // Formata quebras de linha como <br>
             'contentOptions' => ['style' => 'white-space: pre-wrap;'], // Mantém a formatação do texto
+        ],
+        [
+            'attribute' => 'foto',
+            'value' => 'data:image/png;base64,' . $model->foto,
+            'format' => ['image', ['width' => 100, 'height' => 100]]
         ],
         'quantidade:integer', // Exibindo o campo numérico
     ],
@@ -431,6 +444,17 @@ $dataProvider = new \yii\data\ArrayDataProvider([
             'contentOptions' => ['class' => 'text-center'],
             'filter' => false,
             'enableSorting' => false,
+        ],
+        [
+            'attribute' => 'imagem_base64',
+            'format' => 'raw',
+            'value' => fn($model) => "<img src='data:image/jpeg;base64," . $model->imagem_base64 . "' width='70' height='70'/>",
+            'filter' => false,
+        ],
+        [
+            'attribute' => 'campo_admin',
+            'visible' => Yii::$app->user->identity->isAdmin,
+            'value' => fn($model) => $model->campo_admin
         ],
         [
             'label' => 'Ações Rápidas',
