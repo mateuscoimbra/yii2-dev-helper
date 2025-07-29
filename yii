@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+// Carregar autoload
+require __DIR__ . '/vendor/autoload.php';
+
+// Carregar dotenv
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// Validar variáveis obrigatórias
+$dotenv->required(['OPENAI_API_KEY']);
+
+// Resto do código
+require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
+
+$config = require __DIR__ . '/config/console.php';
+
+$application = new yii\console\Application($config);
+$exitCode = $application->run();
+exit($exitCode);
