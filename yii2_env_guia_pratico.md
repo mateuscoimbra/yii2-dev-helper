@@ -21,18 +21,31 @@ Este comando irá:
 Na **raiz do projeto** (mesma pasta do composer.json), crie um arquivo chamado `.env`:
 
 ```env
-# Configurações do Banco de Dados
-DB_DSN=mysql:host=localhost;dbname=meu_banco
-DB_USERNAME=meu_usuario
-DB_PASSWORD=minha_senha
+# ===================
+# BANCO DE DADOS MYSQL
+# ===================
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=meubanco
+DB_USERNAME=admin
+DB_PASSWORD=admin
+DB_CHARSET=utf8mb4
 
-# Configurações da Aplicação
-APP_DEBUG=true
-APP_ENV=development
+# ===================
+# APLICAÇÃO
+# ===================
+APP_NAME=MeuApp
+APP_ENV=dev # Pode ser: 'dev' (desenvolvimento), 'prod' (produção), 'test' (testes automatizados)
+APP_DEBUG=true # true para desenvolvimento, false para produção
+APP_URL=http://localhost:8080
 
-# Chaves de API (exemplos)
-MAIL_API_KEY=sua_chave_aqui
-GOOGLE_API_KEY=sua_chave_google
+# ===================
+# SERVIÇOS EXTERNOS
+# ===================
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=meu@email.com
+MAIL_PASSWORD=senha_do_email
 ```
 
 **⚠️ IMPORTANTE:** Nunca versione o arquivo `.env` no Git!
@@ -51,17 +64,31 @@ Crie um arquivo `.env.example` (este SIM pode ser versionado):
 
 ```env
 # Configurações do Banco de Dados
-DB_DSN=mysql:host=localhost;dbname=nome_do_banco
-DB_USERNAME=usuario
-DB_PASSWORD=senha
+# ===================
+# BANCO DE DADOS MYSQL
+# ===================
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=meubanco
+DB_USERNAME=admin
+DB_PASSWORD=admin
+DB_CHARSET=utf8mb4
 
-# Configurações da Aplicação
-APP_DEBUG=true
-APP_ENV=development
+# ===================
+# APLICAÇÃO
+# ===================
+APP_NAME=MeuApp
+APP_ENV=dev # Pode ser: 'dev' (desenvolvimento), 'prod' (produção), 'test' (testes automatizados)
+APP_DEBUG=true # true para desenvolvimento, false para produção
+APP_URL=http://localhost:8080
 
-# Chaves de API
-MAIL_API_KEY=
-GOOGLE_API_KEY=
+# ===================
+# SERVIÇOS EXTERNOS
+# ===================
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=meu@email.com
+MAIL_PASSWORD=senha_do_email
 ```
 
 ## Passo 5: Carregar o dotenv no Yii2
@@ -336,17 +363,26 @@ $dotenv->required([
     'DB_HOST',
     'DB_NAME', 
     'DB_USERNAME',
-    'OPENAI_API_KEY'
+    'OPENAI_API_KEY',
+    'GEMINI_API_KEY'
 ]);
 
 // Validações opcionais com tipos
 $dotenv->required('DB_PORT')->isInteger();
 $dotenv->required('APP_DEBUG')->isBoolean();
 
+defined('YII_DEBUG') or define('YII_DEBUG', $_ENV['APP_DEBUG'] === 'true');
+defined('YII_ENV') or define('YII_ENV', $_ENV['APP_ENV'] ?: 'prod');
+
 // Resto do código Yii2
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
 $config = require __DIR__ . '/../config/web.php';
+
+// Verifica se as variáveis estão vindo corretamente
+// var_dump($_ENV['APP_DEBUG']);
+// var_dump($_ENV['APP_ENV']);
+// exit; // evita continuar carregando Yii após debug
 
 (new yii\web\Application($config))->run();
 ```
