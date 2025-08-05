@@ -110,17 +110,26 @@ $dotenv->required([
     'DB_HOST',
     'DB_NAME', 
     'DB_USERNAME',
-    'OPENAI_API_KEY'
+    'OPENAI_API_KEY',
+    'GEMINI_API_KEY'
 ]);
 
 // Validações opcionais com tipos
 $dotenv->required('DB_PORT')->isInteger();
 $dotenv->required('APP_DEBUG')->isBoolean();
 
+defined('YII_DEBUG') or define('YII_DEBUG', $_ENV['APP_DEBUG'] === 'true');
+defined('YII_ENV') or define('YII_ENV', $_ENV['APP_ENV'] ?: 'prod');
+
 // Resto do código Yii2
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
 $config = require __DIR__ . '/../config/web.php';
+
+// Verifica se as variáveis estão vindo corretamente
+// var_dump($_ENV['APP_DEBUG']);
+// var_dump($_ENV['APP_ENV']);
+// exit; // evita continuar carregando Yii após debug
 
 (new yii\web\Application($config))->run();
 ```
@@ -130,7 +139,13 @@ $config = require __DIR__ . '/../config/web.php';
 ```php
 #!/usr/bin/env php
 <?php
-
+/**
+ * Yii console bootstrap file.
+ *
+ * @link https://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license https://www.yiiframework.com/license/
+ */
 // Carregar autoload
 require __DIR__ . '/vendor/autoload.php';
 
@@ -140,8 +155,11 @@ $dotenv->load();
 
 // Validar variáveis obrigatórias
 $dotenv->required(['OPENAI_API_KEY']);
+$dotenv->required(['GEMINI_API_KEY']);
 
-// Resto do código
+defined('YII_DEBUG') or define('YII_DEBUG', $_ENV['APP_DEBUG'] === 'true');
+defined('YII_ENV') or define('YII_ENV', $_ENV['APP_ENV'] ?: 'prod');
+
 require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
 $config = require __DIR__ . '/config/console.php';
@@ -149,6 +167,7 @@ $config = require __DIR__ . '/config/console.php';
 $application = new yii\console\Application($config);
 $exitCode = $application->run();
 exit($exitCode);
+
 ```
 
 ## Passo 6: Usar as variáveis nos arquivos de configuração
