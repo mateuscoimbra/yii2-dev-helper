@@ -1,5 +1,3 @@
----
-
 ````md
 # 🖥️ Guia Completo: Como Fazer Dock DisplayLink (Wavlink WL-UG39DK7) Funcionar no Ubuntu 24.04+
 
