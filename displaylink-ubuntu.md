@@ -1,6 +1,3 @@
-Perfeito — excelente iniciativa 👏
-Vou te entregar um `.md` completo, didático e profissional, pronto pra subir no GitHub.
-
 ---
 
 ````md
