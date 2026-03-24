@@ -91,7 +91,7 @@ SecureBoot disabled
 ## 1. Baixar o driver DisplayLink
 
 Baixe do site oficial:
-[https://www.synaptics.com/products/displaylink-usb-graphics-software-ubuntu](https://www.synaptics.com/products/displaylink-usb-graphics-software-ubuntu)
+[[https://www.synaptics.com/products/displaylink-usb-graphics-software-ubuntu](https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu)]
 
 ---
 
