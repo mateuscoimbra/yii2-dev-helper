@@ -1,101 +1,140 @@
 ````md
-# 🖥️ Guia Completo: Como Fazer Dock DisplayLink (Wavlink WL-UG39DK7) Funcionar no Ubuntu 24.04+
 
-> Solução testada no Ubuntu 24.04.4 LTS (Kernel 6.8+ / 6.17+)  
-> Compatível com docks baseadas em DisplayLink (ex: Wavlink)
+# 🖥️ DisplayLink no Ubuntu 24.04+ (Guia Completo para Iniciantes)
+
+> 🚀 Guia passo a passo para fazer docks DisplayLink funcionarem no Linux
+> 💡 Testado no Ubuntu 24.04.4 LTS (Kernel 6.8+)
+> 🔌 Compatível com Wavlink, Dell, Plugable e similares
+
+---
+
+## 📚 Índice
+
+* [📌 Problema](#-problema)
+* [🧠 Causa](#-causa)
+* [✅ Solução (Resumo Rápido)](#-solução-resumo-rápido)
+* [⚠️ Pré-requisitos](#️-pré-requisitos)
+* [📥 1. Download do Driver (IMPORTANTE)](#-1-download-do-driver-importante)
+* [⚙️ 2. Corrigir o EVDI (ESSENCIAL)](#️-2-corrigir-o-evdi-essencial)
+* [⚙️ 3. Instalar o Driver](#️-3-instalar-o-driver)
+* [🔐 4. Secure Boot](#-4-secure-boot)
+* [🔄 5. Reiniciar](#-5-reiniciar)
+* [🧪 6. Testar se Funcionou](#-6-testar-se-funcionou)
+* [🛠️ Troubleshooting](#️-troubleshooting)
+* [💡 Dicas Importantes](#-dicas-importantes)
 
 ---
 
 ## 📌 Problema
 
-Ao conectar uma dock DisplayLink no Ubuntu 24.04+, os monitores externos:
+Se você conectou sua dock DisplayLink no Ubuntu 24.04+, provavelmente viu isso:
 
-- ❌ Não são reconhecidos
-- ❌ Não exibem imagem
-- ❌ Funcionam parcialmente ou travam
+* ❌ Monitor externo não aparece
+* ❌ Tela preta
+* ❌ Travamentos
+* ❌ Só um monitor funciona
 
 ---
 
 ## 🧠 Causa
 
-O driver oficial do DisplayLink:
+Isso acontece porque:
 
-- Usa uma versão antiga do `evdi`
-- Não é compatível com kernels recentes (6.8+)
-- Pode ser bloqueado pelo **Secure Boot**
+* O driver oficial usa um `evdi` antigo
+* O Ubuntu 24 usa kernel novo (6.8+)
+* O driver ainda não acompanha essa evolução
+* O Secure Boot pode bloquear o driver
 
 ---
 
-## ✅ Solução
+## ✅ Solução (Resumo Rápido)
 
-Corrigir manualmente o driver e usar uma versão atualizada do `evdi`.
+Você vai fazer basicamente 3 coisas:
+
+1. Baixar o driver oficial (com um passo escondido ⚠️)
+2. Corrigir manualmente o `evdi`
+3. Instalar o driver
 
 ---
 
 # ⚠️ Pré-requisitos
 
-## 1. Verifique a versão do kernel
+## ✔️ 1. Verifique seu kernel
 
 ```bash
 uname -r
-````
-
-Se for algo como:
-
-```bash
-6.8.x ou superior
 ```
 
-👉 Você precisa deste guia.
+Se for **6.8 ou superior**, siga este guia.
 
 ---
 
-## 2. Desativar Secure Boot (OBRIGATÓRIO)
-
-### Por quê?
-
-O Secure Boot bloqueia módulos compilados manualmente (`evdi`).
-
-### Como fazer:
-
-1. Reinicie o computador
-2. Entre na BIOS/UEFI (`F2`, `DEL`, `ESC`, etc.)
-3. Procure por:
-
-   ```
-   Secure Boot
-   ```
-4. Defina como:
-
-   ```
-   Disabled
-   ```
-5. Salve e reinicie
-
-### Verificar:
+## ✔️ 2. Instale dependências
 
 ```bash
-mokutil --sb-state
-```
-
-Saída esperada:
-
-```bash
-SecureBoot disabled
+sudo apt update
+sudo apt install -y dkms build-essential linux-headers-$(uname -r) git unzip
 ```
 
 ---
 
-# 📦 Passo a Passo
+# 📥 1. Download do Driver (IMPORTANTE)
 
-## 1. Baixar o driver DisplayLink
-
-Baixe do site oficial:
-[[https://www.synaptics.com/products/displaylink-usb-graphics-software-ubuntu](https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu)]
+👉 Acesse:
+[https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu](https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu)
 
 ---
 
-## 2. Acessar a pasta
+## ⚠️ PASSO CRÍTICO (FACILMENTE IGNORADO)
+
+Na página:
+
+1. Procure por:
+
+```
+Latest Official Driver
+DisplayLink USB Graphics Software for Ubuntu
+```
+
+2. Clique em **Download**
+
+---
+
+## 🔐 Aceite da licença (OBRIGATÓRIO)
+
+Você será redirecionado para outra página.
+
+👉 Exemplo:
+[https://www.synaptics.com/products/displaylink-usb-graphics-software-ubuntu-62?filetype=exe](https://www.synaptics.com/products/displaylink-usb-graphics-software-ubuntu-62?filetype=exe)
+
+Agora:
+
+* Role até o final
+* Marque a caixa de aceite
+* Clique em **Accept**
+
+---
+
+## ⬇️ Download automático
+
+O arquivo será baixado:
+
+```
+DisplayLink USB Graphics Software for Ubuntu6.2-EXE.zip
+```
+
+---
+
+## 📂 Extraia o arquivo
+
+```bash
+cd ~/Downloads
+unzip "DisplayLink USB Graphics Software for Ubuntu6.2-EXE.zip"
+```
+
+---
+
+## 📁 Entre na pasta
 
 ```bash
 cd ~/Downloads/"DisplayLink USB Graphics Software for Ubuntu6.2-EXE"
@@ -103,95 +142,88 @@ cd ~/Downloads/"DisplayLink USB Graphics Software for Ubuntu6.2-EXE"
 
 ---
 
-## 3. Dar permissão ao arquivo
+# ⚙️ 2. Corrigir o EVDI (ESSENCIAL)
+
+Esse é o passo mais importante do guia.
+
+---
+
+## 🔥 Remover versão antiga
 
 ```bash
-chmod +x displaylink-driver-6.2.0-30.run
+sudo dkms remove evdi/1.12.0 --all || true
 ```
 
 ---
 
-## 4. Extrair o instalador (SEM instalar)
+## 📥 Baixar versão nova
 
 ```bash
-./displaylink-driver-6.2.0-30.run --noexec --keep
+cd ~
+git clone https://github.com/DisplayLink/evdi.git
+cd evdi
 ```
 
 ---
 
-## 5. Entrar na pasta extraída
+## 📌 Usar versão compatível
 
 ```bash
-cd displaylink-driver-6.2.0
+git checkout v1.14.1
 ```
 
 ---
 
-## 6. Substituir o evdi (ESSENCIAL)
-
-Remova o antigo:
+## ⚙️ Compilar
 
 ```bash
-rm evdi.tar.gz
-```
-
-Baixe o mais recente:
-
-```bash
-curl -L https://github.com/DisplayLink/evdi/archive/refs/heads/devel.tar.gz -o evdi.tar.gz
+make
+sudo make install
 ```
 
 ---
 
-## 7. Corrigir o instalador
-
-Abra o script:
+## 📦 Registrar no sistema
 
 ```bash
-nano displaylink-installer.sh
-```
-
-Procure por:
-
-```bash
-tar xf "$TARGZ" -C "$EVDI"
-```
-
-Substitua por:
-
-```bash
-tar xf "$TARGZ" -C "$EVDI" --strip-components=1
-```
-
-Salvar:
-
-* `CTRL + O`
-* `ENTER`
-* `CTRL + X`
-
----
-
-## 8. Instalar o driver
-
-```bash
-sudo ./displaylink-installer.sh
-```
-
-⚠️ Quando aparecer:
-
-```text
-Do you want to install with apt? (Y/n)
-```
-
-👉 Responda:
-
-```bash
-n
+sudo dkms add .
+sudo dkms build evdi/1.14.1
+sudo dkms install evdi/1.14.1
 ```
 
 ---
 
-## 9. Reiniciar o sistema
+# ⚙️ 3. Instalar o Driver
+
+```bash
+cd ~/Downloads/"DisplayLink USB Graphics Software for Ubuntu6.2-EXE"
+```
+
+```bash
+sudo ./displaylink-driver-6.2.run
+```
+
+---
+
+# 🔐 4. Secure Boot
+
+Se não funcionar, provavelmente é isso.
+
+---
+
+## ✔️ Opção fácil
+
+Desative o Secure Boot na BIOS
+
+---
+
+## ✔️ Opção avançada
+
+Assinar módulo manualmente (não recomendado para iniciantes)
+
+---
+
+# 🔄 5. Reiniciar
 
 ```bash
 sudo reboot
@@ -199,125 +231,82 @@ sudo reboot
 
 ---
 
-# 🧪 Verificação
+# 🧪 6. Testar se Funcionou
 
-Após reiniciar:
+```bash
+xrandr
+```
+
+Se aparecer mais telas → 🎉 sucesso!
+
+---
+
+# 🛠️ Troubleshooting
+
+## 🔍 Ver serviço
+
+```bash
+systemctl status displaylink-driver
+```
+
+---
+
+## 🔍 Ver logs
+
+```bash
+journalctl -u displaylink-driver
+```
+
+---
+
+## 🔍 Ver módulo
 
 ```bash
 lsmod | grep evdi
 ```
 
-Se aparecer algo como:
+---
 
-```bash
-evdi ...
-```
+## ❌ Ainda não funcionou?
 
-👉 ✔️ Funcionando corretamente
+Verifique:
+
+* Secure Boot ativo
+* Kernel muito novo
+* Cabo USB ruim
+* Dock sem energia
 
 ---
 
-# 🚨 Problemas comuns
+# 💡 Dicas Importantes
 
-## ❌ 1. Secure Boot ativado
-
-```bash
-mokutil --sb-state
-```
-
-Se aparecer:
-
-```bash
-SecureBoot enabled
-```
-
-👉 Desative na BIOS
+* Sempre use versão nova do `evdi`
+* O driver oficial quase sempre está desatualizado
+* Reiniciar resolve vários problemas
+* Use cabo USB 3.0 ou superior
 
 ---
 
-## ❌ 2. Erro ao compilar evdi
+# ⭐ Contribuição
 
-Instale headers do kernel:
+Se esse guia te ajudou:
 
-```bash
-sudo apt install linux-headers-$(uname -r)
-```
-
----
-
-## ❌ 3. Usou instalação via APT
-
-Se você respondeu `Y` no instalador:
-
-👉 Vai instalar versão quebrada
-
-### Corrigir:
-
-```bash
-sudo apt remove --purge displaylink-driver evdi -y
-sudo rm -rf /var/lib/dkms/evdi
-sudo apt autoremove -y
-```
-
-E refaça o processo.
+* ⭐ Dê uma estrela no repositório
+* 🛠️ Sugira melhorias
+* 🧠 Compartilhe com outros
 
 ---
 
-## ❌ 4. Wayland
+# 🧾 Licença
 
-Na tela de login:
-
-* Clique na engrenagem ⚙️
-* Escolha:
-
-  ```
-  Ubuntu on Xorg
-  ```
+Este guia é livre para uso e modificação.
 
 ---
 
-# 💡 Dicas avançadas
+## 🚀 Resultado Final Esperado
 
-## Atualizações de Kernel
-
-Ao atualizar o kernel:
-
-* O driver pode parar de funcionar
-* Reinstale seguindo este guia
-
----
-
-## Automação futura
-
-Você pode criar um script `.sh` para automatizar esse processo.
-
----
-
-# 🧠 Conclusão
-
-Para Ubuntu 24.04+:
-
-* ✔️ Use instalação manual
-* ✔️ Atualize o `evdi`
-* ✔️ NÃO use APT
-* ✔️ Desative Secure Boot
-
----
-
-# 🤝 Contribuição
-
-Se este guia te ajudou:
-
-⭐ Dê uma estrela no repositório
-🔧 Contribuições são bem-vindas
-🐛 Abra issues para problemas
-
----
-
-# 📄 Licença
-
-MIT
-
-```
+* ✅ Dock funcionando
+* ✅ Monitores detectados
+* ✅ Sistema estável
 
 ---
