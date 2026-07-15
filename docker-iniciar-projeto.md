@@ -64,17 +64,27 @@ O Yii2 Basic já vem com um arquivo `docker-compose.yml` padrão, mas nós vamos
 version: '3.8'
 
 services:
-  # Servidor Web com PHP + Apache
-  web:
-    image: yiisoftware/yii2-php:8.2-apache
+  # Servidor Web com PHP + Apache (Oficial do Yii2)
+  php:
+    image: yiisoftware/yii2-php:8.5-apache-latest
     ports:
-      - "8080:80"
+      - '8080:80' # Acesse seu Yii2 em http://localhost:8080
     volumes:
-      - .:/app
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./:/app:delegated
     environment:
       - PHP_ENABLE_XDEBUG=1
     depends_on:
       - db
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "if [ \"$$(stat -c '%U' /app/runtime)\" != 'www-data' ] || [ \"$$(stat -c '%U' /app/web/assets)\" != 'www-data' ]; then chown -R www-data:www-data /app/runtime /app/web/assets && chmod -R ug+rwX /app/runtime /app/web/assets; fi && runuser -u www-data -- touch /app/runtime/test_write && rm /app/runtime/test_write && exit 0 || exit 1",
+      ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   # Banco de Dados MariaDB (Substituto leve e moderno para o MySQL)
   db:
@@ -89,11 +99,11 @@ services:
     volumes:
       - db-data:/var/lib/mysql
 
-  # Gerenciador de Banco de Dados (Substituto ultra-leve para o phpMyAdmin)
+  # Gerenciador de Banco de Dados (Adminer)
   adminer:
     image: adminer:latest
     ports:
-      - "8081:8080"
+      - "8081:8080" # Acesse o Adminer em http://localhost:8081
     depends_on:
       - db
 
