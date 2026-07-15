@@ -39,6 +39,7 @@ docker run --rm -v ${PWD}:/app -w /app composer create-project --prefer-dist yii
 
 # Nota: Se estiver no Windows (PowerShell), use ${PWD} em vez de $(pwd).
 docker run --rm -v $(pwd):/app -w /app composer create-project --prefer-dist yiisoft/yii2-app-basic meu-projeto-yii
+docker run --rm -v %cd%:/app -w /app composer create-project --prefer-dist yiisoft/yii2-app-basic meu-projeto-yii
 ```
 
 ---
